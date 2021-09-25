@@ -12,13 +12,17 @@ public class Account {
     AccountType type;
     Polarity normal;
     String normalString;
+    int balance;
+    String balanceString;
+
     ObservableList<LedgerEntry> entries = FXCollections.observableArrayList();
 
-    public Account(int number, String name, AccountType type, Polarity normalValue) {
+    public Account(int number, String name, AccountType type, Polarity normalValue, int balance) {
         this.number = number;
         this.name = name;
         this.type = type;
         this.normal = normalValue;
+        this.balance = balance;
 
         switch (normalValue) {
             case Debit:
@@ -28,12 +32,13 @@ public class Account {
                 this.normalString = "Credit";
                 break;
         }
+
+        this.balanceString = Integer.toString(balance);
     }
 
     public int getNumber() {
         return number;
     }
-
     public void setNumber(int number) {
         this.number = number;
     }
@@ -41,7 +46,6 @@ public class Account {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -49,7 +53,6 @@ public class Account {
     public AccountType getType() {
         return type;
     }
-
     public void setType(AccountType type) {
         this.type = type;
     }
@@ -57,7 +60,6 @@ public class Account {
     public Polarity getNormal() {
         return normal;
     }
-
     public void setNormal(Polarity normalValue) {
         this.normal = normalValue;
     }
@@ -65,6 +67,9 @@ public class Account {
     public String getNormalString() {
         return normalString;
     }
+
+    public int getBalance() { return balance; }
+    public void setBalance(int balance) { this.balance = balance; }
 
     public LedgerEntry getEntry(int index) {
         return entries.get(index);

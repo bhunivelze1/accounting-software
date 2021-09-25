@@ -484,17 +484,23 @@ public class AccountingSoftware extends Application {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         TableColumn<Account, String> normalCol = new TableColumn<>("Normal");
         normalCol.setCellValueFactory(new PropertyValueFactory<>("normalString"));
-        TableColumn<Account, String> totalCol = new TableColumn<>("Total");
+        TableColumn<Account, String> balanceCol = new TableColumn<>("Balance");
+        balanceCol.setCellValueFactory(new PropertyValueFactory<>("balance"));
 
         TableView<Account> accountTableView = new TableView();
-        accountTableView.getColumns().addAll(numberCol, nameCol, normalCol, totalCol);
+        accountTableView.getColumns().addAll(numberCol, nameCol, normalCol, balanceCol);
         accountTableView.getItems().addAll(accountList.getAllAccounts());
         
         Button addAccountButton = new Button("Add Account");
         addAccountButton.setOnAction(e -> openAddAccountWindow());
+
+        Button editAccountButton = new Button("Edit Account");
+        editAccountButton.setOnAction(e -> openEditAccountWindow());
+
         Button deleteAccountButton = new Button("Delete Account");
+        deleteAccountButton.setOnAction(e -> openDeleteAccountWindow());
         
-        HBox buttonRow = new HBox(5, addAccountButton, deleteAccountButton);
+        HBox buttonRow = new HBox(5, addAccountButton, editAccountButton, deleteAccountButton);
         buttonRow.setAlignment(Pos.CENTER);
         buttonRow.setPadding(new Insets(5));
 
@@ -508,17 +514,25 @@ public class AccountingSoftware extends Application {
         accountManager.show();
     }
 
+
     public void openAddAccountWindow() {
         Stage addAccountWindow = new Stage();
 
         TextField accountNumber = new TextField();
         accountNumber.setPrefWidth(50);
+
         TextField accountName = new TextField();
+
         ComboBox<String> accountType = new ComboBox<>();
         accountType.getItems().addAll(Arrays.asList("Aset", "Liabilitas", "Ekuitas", "Pendapatan", "Beban"));
+
         ComboBox<String> accountNormal = new ComboBox<>();
         accountNormal.getItems().addAll(Arrays.asList("Debit", "Kredit"));
+
+        TextField accountInitialValue = new TextField();
+
         Button addButton = new Button("Add");
+
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(e -> addAccountWindow.close());
 
@@ -534,6 +548,8 @@ public class AccountingSoftware extends Application {
         grid.add(accountType, 2, 1);
         grid.add(new Label("Saldo Normal"), 3, 0);
         grid.add(accountNormal, 3, 1);
+        grid.add(new Label("Saldo Awal"), 4, 0);
+        grid.add(accountInitialValue, 4, 1);
 
         HBox buttonRow = new HBox(5, addButton, cancelButton);
         buttonRow.setAlignment(Pos.CENTER);
@@ -547,6 +563,12 @@ public class AccountingSoftware extends Application {
         addAccountWindow.show();
     }
 
+    //TODO: Add edit account functionality
+    private void openEditAccountWindow() {
+
+    }
+
+    //TODO: Add delete accont functionality
     public void openDeleteAccountWindow() {
 
     }
