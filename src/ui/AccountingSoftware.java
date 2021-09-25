@@ -2,35 +2,34 @@ package ui;
 
 import account.Account;
 import account.AccountList;
-import static account.AccountType.Asset;
-import static account.AccountType.Equity;
-import static account.AccountType.Expense;
-import static account.AccountType.Income;
-import static account.AccountType.Liability;
 import account.Polarity;
-import journal.JournalEntry;
-import ledger.Ledger;
-import ledger.LedgerEntry;
-import ledger.LedgerTable;
-import trialBalance.TrialBalanceTableEntry;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import journal.JournalEntry;
+import ledger.Ledger;
+import ledger.LedgerEntry;
+import ledger.LedgerTable;
+import trialBalance.TrialBalanceTableEntry;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AccountingSoftware extends Application {
 
@@ -554,9 +553,32 @@ public class AccountingSoftware extends Application {
 
     public void openAboutDeveloper() {
         Stage aboutDeveloperWindow = new Stage();
-        aboutDeveloperWindow.setTitle("Account Manager");
+
+        ImageView aboutDeveloperImageView = new ImageView();
+        Image aboutDeveloperImage = new Image(
+                "file:../resource/developer-image.png",
+                300, 300,
+                true, true);
+        aboutDeveloperImageView.setImage(aboutDeveloperImage);
+
+        Label aboutDeveloperText = new Label(
+                "I Gusti Bagus Ananda is a student currenly studying Accounting in State University of Makassar. " +
+                        "He is very passionate about programming. Right now he is pursuing a career in software engineering.");
+        aboutDeveloperText.setWrapText(true);
+        aboutDeveloperText.setPrefWidth(250);
+        aboutDeveloperText.setTextAlignment(TextAlignment.JUSTIFY);
+
+
+        HBox root = new HBox(5);
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().addAll(aboutDeveloperImageView, aboutDeveloperText);
+
+        aboutDeveloperWindow.setTitle("About Developer");
+        aboutDeveloperWindow.setWidth(600);
+        aboutDeveloperWindow.setHeight(300);
         aboutDeveloperWindow.setResizable(false);
         aboutDeveloperWindow.initModality(Modality.APPLICATION_MODAL);
+        aboutDeveloperWindow.setScene(new Scene((root)));
         aboutDeveloperWindow.show();
     }
 
