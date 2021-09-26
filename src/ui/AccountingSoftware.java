@@ -248,9 +248,6 @@ public class AccountingSoftware extends Application {
                                 null,
                                 tempAccount.getNormal(),
                                 tempAccount.getBalanceString()));
-
-                ledger.sortLedger();
-                ledger.addLedgerTable(tempAccount);
             }
 
         });
