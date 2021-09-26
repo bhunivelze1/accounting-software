@@ -10,14 +10,14 @@ public class Account {
     int number;
     String name;
     AccountType type;
-    Polarity normal;
+    AccountPolarity normal;
     String normalString;
     int balance;
     String balanceString;
 
     ObservableList<LedgerEntry> entries = FXCollections.observableArrayList();
 
-    public Account(int number, String name, AccountType type, Polarity normalValue, int balance) {
+    public Account(int number, String name, AccountType type, AccountPolarity normalValue, int balance) {
         this.number = number;
         this.name = name;
         this.type = type;
@@ -28,8 +28,8 @@ public class Account {
             case Debit:
                 this.normalString = "Debit";
                 break;
-            case Credit:
-                this.normalString = "Credit";
+            case Kredit:
+                this.normalString = "Kredit";
                 break;
         }
 
@@ -57,10 +57,10 @@ public class Account {
         this.type = type;
     }
 
-    public Polarity getNormal() {
+    public AccountPolarity getNormal() {
         return normal;
     }
-    public void setNormal(Polarity normalValue) {
+    public void setNormal(AccountPolarity normalValue) {
         this.normal = normalValue;
     }
 
@@ -71,6 +71,10 @@ public class Account {
     public int getBalance() { return balance; }
     public void setBalance(int balance) { this.balance = balance; }
 
+    public String getBalanceString() {
+        return this.balanceString;
+    }
+
     public LedgerEntry getEntry(int index) {
         return entries.get(index);
     }
@@ -80,51 +84,51 @@ public class Account {
     }
 
     public void addEntry(LedgerEntry entry) {
-        LedgerEntry tempEntry = entry;
+        LedgerEntry tempLedgerEntry = entry;
         if (this.entries.isEmpty()) {
-            switch (tempEntry.getTransactionType()) {
+            switch (tempLedgerEntry.getTransactionType()) {
                 case Debit:
-                    tempEntry.setTotalValue(tempEntry.getDebitValue());
+                    tempLedgerEntry.setTotalValue(tempLedgerEntry.getDebitValue());
                     break;
-                case Credit:
-                    tempEntry.setTotalValue(tempEntry.getCreditValue());
+                case Kredit:
+                    tempLedgerEntry.setTotalValue(tempLedgerEntry.getCreditValue());
                     break;
             }
-            
-            tempEntry.setTotalString("Rp" + String.format("%,d", tempEntry.getTotalValue()));
-            this.entries.add(tempEntry);
-            
+
+            tempLedgerEntry.setTotalString("Rp" + String.format("%,d", tempLedgerEntry.getTotalValue()));
+            this.entries.add(tempLedgerEntry);
+
         } else if (!this.entries.isEmpty()) {
-            tempEntry.setTotalValue(calculateTotal(this.entries.get(this.entries.size()-1), tempEntry));
-            tempEntry.setTotalString("Rp" + String.format("%,d", tempEntry.getTotalValue()));
-            this.entries.add(tempEntry);
-        } 
+            tempLedgerEntry.setTotalValue(calculateTotal(this.entries.get(this.entries.size()-1), tempLedgerEntry));
+            tempLedgerEntry.setTotalString("Rp" + String.format("%,d", tempLedgerEntry.getTotalValue()));
+            this.entries.add(tempLedgerEntry);
+        }
     }
-    
+
     public int calculateTotal(LedgerEntry lastEntry, LedgerEntry currentEntry) {
         switch(this.normal) {
             case Debit:
                 switch (currentEntry.getTransactionType()) {
                     case Debit:
                         return lastEntry.getTotalValue() + currentEntry.getDebitValue();
-                    case Credit:
+                    case Kredit:
                         return lastEntry.getTotalValue() - currentEntry.getCreditValue();
                 }
                 break;
-            case Credit:
+            case Kredit:
                 switch (currentEntry.getTransactionType()) {
                     case Debit:
                         return lastEntry.getTotalValue() - currentEntry.getDebitValue();
-                    case Credit:
+                    case Kredit:
                         return lastEntry.getTotalValue() + currentEntry.getCreditValue();
                 }
                 break;
         }
         return 0;
     }
-
         @Override
     public String toString() {
         return this.name;
     }
+
 }

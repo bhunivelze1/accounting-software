@@ -1,6 +1,6 @@
 package ledger;
 
-import account.Polarity;
+import account.AccountPolarity;
 import java.time.LocalDate;
 
 //TODO: Add account balance update in accout manager when a new entry submitted to ledger
@@ -8,7 +8,7 @@ public class LedgerEntry {
     
     LocalDate date;
     String description;
-    Polarity transactionType;
+    AccountPolarity transactionType;
     int debitValue;
     int creditValue;
     int totalValue;
@@ -16,7 +16,7 @@ public class LedgerEntry {
     String creditString;
     String totalString;
 
-    public LedgerEntry(LocalDate date, String description, Polarity transactionType, String value) {
+    public LedgerEntry(LocalDate date, String description, AccountPolarity transactionType, String value) {
         this.date = date;
         this.description = description;
         this.transactionType = transactionType;
@@ -28,7 +28,7 @@ public class LedgerEntry {
                 this.creditString = null;
                 this.creditValue = 0;
                 break;
-            case Credit:
+            case Kredit:
                 this.creditString = "Rp" + String.format("%,d", Integer.parseInt(value));
                 this.creditValue = Integer.valueOf(value);
                 this.debitString = null;
@@ -54,11 +54,11 @@ public class LedgerEntry {
         this.description = description;
     }
 
-    public Polarity getTransactionType() {
+    public AccountPolarity getTransactionType() {
         return this.transactionType;
     }
 
-    public void setTransactionType(Polarity transactionType) {
+    public void setTransactionType(AccountPolarity transactionType) {
         this.transactionType = transactionType;
     }
 

@@ -1,17 +1,17 @@
 package journal;
 
-import account.Polarity;
+import account.AccountPolarity;
 import java.time.LocalDate;
 
 public class JournalEntry {
     
     LocalDate date;
     String account;
-    Polarity transactionType;
+    AccountPolarity transactionType;
     String debitValue;
     String creditValue;
     
-    public JournalEntry(LocalDate date, String account, Polarity transactionType, String value) {
+    public JournalEntry(LocalDate date, String account, AccountPolarity transactionType, String value) {
         this.date = date;
         this.account = account;
         this.transactionType = transactionType;
@@ -21,7 +21,7 @@ public class JournalEntry {
                 this.debitValue = value;
                 this.creditValue = null;
                 break;
-            case Credit:
+            case Kredit:
                 this.creditValue = value;
                 this.debitValue = null;
                 break;
@@ -52,11 +52,11 @@ public class JournalEntry {
         this.account = account;
     }
 
-    public Polarity getTransactionType() {
+    public AccountPolarity getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(Polarity transactionType) {
+    public void setTransactionType(AccountPolarity transactionType) {
         this.transactionType = transactionType;
     }
 

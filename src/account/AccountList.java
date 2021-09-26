@@ -5,22 +5,22 @@ import java.util.Arrays;
 
 public class AccountList {
     static ArrayList<Account> accounts = new ArrayList(Arrays.asList(
-            new Account(111, "Kas", AccountType.Asset, Polarity.Debit, 0),
-            new Account(112, "Piutang", AccountType.Asset, Polarity.Debit, 0),
-            new Account(113, "Persediaan", AccountType.Asset, Polarity.Debit, 0),
-            new Account(114, "Perlengkapan", AccountType.Asset, Polarity.Debit, 0),
-            new Account(121, "Peralatan", AccountType.Asset, Polarity.Debit, 0),
-            new Account(122, "Kendaraan", AccountType.Asset, Polarity.Debit, 0),
-            new Account(123, "Bangunan", AccountType.Asset, Polarity.Debit, 0),
-            new Account(124, "Tanah", AccountType.Asset, Polarity.Debit, 0),
-            new Account(211, "Utang Usaha", AccountType.Liability, Polarity.Credit, 0),
-            new Account(212, "Utang Wesel", AccountType.Liability, Polarity.Credit, 0),
-            new Account(221, "Utang Bank", AccountType.Liability, Polarity.Credit, 0),
-            new Account(311, "Modal", AccountType.Equity, Polarity.Credit, 0),
-            new Account(411, "Pendapatan Jasa", AccountType.Income, Polarity.Credit, 0),
-            new Account(421, "Pendapatan Bunga", AccountType.Income, Polarity.Credit, 0),
-            new Account(422, "Pendapatan Lain-Lain", AccountType.Income, Polarity.Credit, 0),
-            new Account(511, "Beban Gaji", AccountType.Expense, Polarity.Debit, 0)));
+            new Account(111, "Kas", AccountType.Aset, AccountPolarity.Debit, 10000),
+            new Account(112, "Piutang", AccountType.Aset, AccountPolarity.Debit, 20000),
+            new Account(113, "Persediaan", AccountType.Aset, AccountPolarity.Debit, 0),
+            new Account(114, "Perlengkapan", AccountType.Aset, AccountPolarity.Debit, 20000),
+            new Account(121, "Peralatan", AccountType.Aset, AccountPolarity.Debit, 0),
+            new Account(122, "Kendaraan", AccountType.Aset, AccountPolarity.Debit, 0),
+            new Account(123, "Bangunan", AccountType.Aset, AccountPolarity.Debit, 0),
+            new Account(124, "Tanah", AccountType.Aset, AccountPolarity.Debit, 0),
+            new Account(211, "Utang Usaha", AccountType.Liabilitas, AccountPolarity.Kredit, 0),
+            new Account(212, "Utang Wesel", AccountType.Liabilitas, AccountPolarity.Kredit, 0),
+            new Account(221, "Utang Bank", AccountType.Liabilitas, AccountPolarity.Kredit, 0),
+            new Account(311, "Modal", AccountType.Ekuitas, AccountPolarity.Kredit, 0),
+            new Account(411, "Pendapatan Jasa", AccountType.Pendapatan, AccountPolarity.Kredit, 0),
+            new Account(421, "Pendapatan Bunga", AccountType.Pendapatan, AccountPolarity.Kredit, 0),
+            new Account(422, "Pendapatan Lain-Lain", AccountType.Pendapatan, AccountPolarity.Kredit, 0),
+            new Account(511, "Beban Gaji", AccountType.Beban, AccountPolarity.Debit, 0)));
     
     public ArrayList<Account> getAllAccounts() {
         return accounts;

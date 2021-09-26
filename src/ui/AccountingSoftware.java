@@ -2,7 +2,8 @@ package ui;
 
 import account.Account;
 import account.AccountList;
-import account.Polarity;
+import account.AccountPolarity;
+import account.AccountType;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,7 +30,6 @@ import trialBalance.TrialBalanceTableEntry;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AccountingSoftware extends Application {
 
@@ -51,8 +51,13 @@ public class AccountingSoftware extends Application {
 
     TableView<JournalEntry> journal;
 
-    VBox assetScrollPaneContent, liabilityScrollPaneContent, equityScrollPaneContent, incomeScrollPaneContent,                                        
-            expenseScrollPaneContent, trialBalanceContent;
+    VBox assetScrollPaneContent = new VBox(10);
+    VBox liabilityScrollPaneContent = new VBox(10);
+    VBox equityScrollPaneContent = new VBox(10);
+    VBox incomeScrollPaneContent = new VBox(10);
+    VBox expenseScrollPaneContent = new VBox(10);
+    VBox trialBalanceContent = new VBox(5);
+
 
     public void addNewDebitBlock() {
         int adderRemoverPosition = debitList.getItems().indexOf(debitBlockAdderRemoverRow);
@@ -66,6 +71,7 @@ public class AccountingSoftware extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        //Menu items initilization
         newFile = new MenuItem("New");
         loadFile = new MenuItem("Load");
         loadFile.setOnAction(e -> new FileChooser().showOpenDialog(primaryStage));
@@ -97,17 +103,21 @@ public class AccountingSoftware extends Application {
         //Auto Input toggle button
         toggleAllAutoInput = new ToggleButton("Auto-Input");
         toggleAllAutoInput.setOnAction(e -> toggleAllAutoInput());
-        //Debit & Credit label
+        //Debit & Kredit label
         Label debitLabel = new Label("DEBIT");
         debitLabel.setFont(Font.font("Calibri", 18));
         Label creditLabel = new Label("KREDIT");
         creditLabel.setFont(Font.font("Calibri", 18));
 
-        //Debit & Credit input block
+        //Debit & Kredit input block
         debitInputBlocks.add(new InputBlock());
         creditInputBlocks.add(new InputBlock());
 
-        //Debit & Credit block remover
+        //Button node
+        Button submit = new Button("->");
+        submit.setOnAction(e -> submitEntryToJournal());
+
+        //Debit & Kredit block remover
         debitBlockAdder = new Button("+");
         debitBlockAdder.setOnAction(e -> addNewDebitBlock());
         debitBlockRemover = new Button("-");
@@ -117,14 +127,32 @@ public class AccountingSoftware extends Application {
         creditBlockRemover = new Button("-");
         creditBlockRemover.setOnAction(e -> removeLastCreditBlock());
 
-        //Button node
-        Button submit = new Button("->");
-        submit.setOnAction(e -> submitEntryToJournal());
+        //Debit block adder and remover button layout
+        debitBlockAdderRemoverRow = new HBox(10, debitBlockRemover, debitBlockAdder);
+        debitBlockAdderRemoverRow.setAlignment(Pos.CENTER);
+        //Kredit block adder and remover button layout
+        creditBlockAdderRemoverRow = new HBox(10, creditBlockRemover, creditBlockAdder);
+        creditBlockAdderRemoverRow.setAlignment(Pos.CENTER);
 
-        //Trial Balance button
-        trialBalanceButton = new Button("Tambahkan");
-        trialBalanceButton.setPrefWidth(200);
-        trialBalanceButton.setOnAction(e -> updateTrialBalance());
+        //Debit list
+        debitList = new ListView();
+        debitList.setFixedCellSize(70);
+        debitList.getItems().addAll(debitInputBlocks.get(0), debitBlockAdderRemoverRow);
+        //Kredit list
+        creditList = new ListView();
+        creditList.setFixedCellSize(70);
+        creditList.getItems().addAll(creditInputBlocks.get(0), creditBlockAdderRemoverRow);
+
+        HBox topInputRow = new HBox(5, datePicker, toggleAllAutoInput, descriptionField);
+        topInputRow.setAlignment(Pos.CENTER_LEFT);
+
+        //Debit column
+        VBox debitColumn = new VBox(debitLabel, debitList);
+        //Kredit column
+        VBox creditColumn = new VBox(creditLabel, creditList);
+        //Button column
+        VBox buttonColumn = new VBox(5, submit);
+        buttonColumn.setAlignment(Pos.CENTER);
 
         //Journal table date column
         TableColumn<JournalEntry, LocalDate> dateCol = new TableColumn("Tanggal");
@@ -150,45 +178,22 @@ public class AccountingSoftware extends Application {
         journal = new TableView();
         journal.getColumns().addAll(dateCol, accountCol, debitCol, creditCol);
 
-        //Debit block adder and remover button layout
-        debitBlockAdderRemoverRow = new HBox(10, debitBlockRemover, debitBlockAdder);
-        debitBlockAdderRemoverRow.setAlignment(Pos.CENTER);
-        //Credit block adder and remover button layout
-        creditBlockAdderRemoverRow = new HBox(10, creditBlockRemover, creditBlockAdder);
-        creditBlockAdderRemoverRow.setAlignment(Pos.CENTER);
-
-        //Debit list
-        debitList = new ListView();
-        debitList.setFixedCellSize(70);
-        debitList.getItems().addAll(debitInputBlocks.get(0), debitBlockAdderRemoverRow);
-        //Credit list
-        creditList = new ListView();
-        creditList.setFixedCellSize(70);
-        creditList.getItems().addAll(creditInputBlocks.get(0), creditBlockAdderRemoverRow);
-
-        HBox topInputRow = new HBox(5, datePicker, toggleAllAutoInput, descriptionField);
-        topInputRow.setAlignment(Pos.CENTER_LEFT);
-
-        //Debit column
-        VBox debitColumn = new VBox(debitLabel, debitList);
-        //Credit column
-        VBox creditColumn = new VBox(creditLabel, creditList);
-        //Button column
-        VBox buttonColumn = new VBox(5, submit);
-        buttonColumn.setAlignment(Pos.CENTER);
-
         assetScrollPaneContent = new VBox(10);
         liabilityScrollPaneContent = new VBox(10);
         equityScrollPaneContent = new VBox(10);
         incomeScrollPaneContent = new VBox(10);
         expenseScrollPaneContent = new VBox(10);
 
-        trialBalanceContent = new VBox(trialBalanceButton);
+        //Trial Balance button
+        trialBalanceButton = new Button("Tambahkan");
+        trialBalanceButton.setPrefWidth(200);
+        trialBalanceButton.setOnAction(e -> updateTrialBalance());
+
+        trialBalanceContent.getChildren().add(trialBalanceButton);
         trialBalanceContent.setAlignment(Pos.CENTER);
-        trialBalanceContent.setSpacing(5);
         trialBalanceContent.setPadding(new Insets(10, 0, 0, 0));
 
-        //Journal/Ledger tabs
+        //Ledger tabs
         TabPane ledger = new TabPane(
                 new Tab("Aset", new ScrollPane(assetScrollPaneContent)),
                 new Tab("Liabilitas", new ScrollPane(liabilityScrollPaneContent)),
@@ -197,7 +202,7 @@ public class AccountingSoftware extends Application {
                 new Tab("Beban", new ScrollPane(expenseScrollPaneContent)));
         ledger.setTabMinWidth(100);
         ledger.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
+        //Financial statement tabs
         TabPane financialStatement = new TabPane(
                 new Tab("Laba Rugi"),
                 new Tab("Perubahan Modal"),
@@ -230,8 +235,50 @@ public class AccountingSoftware extends Application {
         primaryStage.show();
     }
 
-    public void removeLastDebitBlock() {
+    //TODO: Add loading of account balance to ledger at the start of program
+    @Override
+    public void init() throws Exception {
+        accountList.getAllAccounts().forEach(e -> {
+            Account tempAccount = e;
 
+            if (tempAccount.getBalance() > 0) {
+                tempAccount.addEntry(
+                        new LedgerEntry(
+                                LocalDate.now(),
+                                null,
+                                tempAccount.getNormal(),
+                                tempAccount.getBalanceString()));
+
+                ledger.sortLedger();
+                ledger.addLedgerTable(tempAccount);
+            }
+
+        });
+
+        for (LedgerTable e : ledger.getAllLedgerTables()) {
+            if (!e.getTableItems().isEmpty()) {
+                switch (e.getAccountType()) {
+                    case Aset:
+                        assetScrollPaneContent.getChildren().add(e);
+                        break;
+                    case Liabilitas:
+                        liabilityScrollPaneContent.getChildren().add(e);
+                        break;
+                    case Ekuitas:
+                        equityScrollPaneContent.getChildren().add(e);
+                        break;
+                    case Pendapatan:
+                        incomeScrollPaneContent.getChildren().add(e);
+                        break;
+                    case Beban:
+                        expenseScrollPaneContent.getChildren().add(e);
+                        break;
+                }
+            }
+        }
+    }
+
+    public void removeLastDebitBlock() {
         if (debitInputBlocks.size() > 1) {
             int adderRemoverPosition = debitList.getItems().indexOf(debitBlockAdderRemoverRow);
 
@@ -252,7 +299,6 @@ public class AccountingSoftware extends Application {
     }
 
     public void removeLastCreditBlock() {
-
         if (creditInputBlocks.size() > 1) {
             int adderRemoverPosition = creditList.getItems().indexOf(creditBlockAdderRemoverRow);
 
@@ -289,7 +335,7 @@ public class AccountingSoftware extends Application {
         journal.getItems().add(new JournalEntry(
                 datePicker.getValue(),
                 debitInputBlocks.get(0).getSelectedAccountName(),
-                Polarity.Debit,
+                AccountPolarity.Debit,
                 "Rp" + String.format("%,d", Integer.parseInt(debitInputBlocks.get(0).getInputValue()))));
 
         //If there is more than one debit entry, insert them into the journal table
@@ -298,7 +344,7 @@ public class AccountingSoftware extends Application {
                 journal.getItems().add(new JournalEntry(
                         null,
                         debitInputBlocks.get(i).getSelectedAccountName(),
-                        Polarity.Debit,
+                        AccountPolarity.Debit,
                         "Rp" + String.format(
                                 "%,d", Integer.parseInt(debitInputBlocks.get(i).getInputValue()))));
             }
@@ -308,7 +354,7 @@ public class AccountingSoftware extends Application {
         journal.getItems().add(new JournalEntry(
                 null,
                 "    " + creditInputBlocks.get(0).getSelectedAccountName(),
-                Polarity.Credit,
+                AccountPolarity.Kredit,
                 "Rp" + String.format("%,d", Integer.parseInt(creditInputBlocks.get(0).getInputValue()))));
 
         //If there is more than one credit entry, insert them into the journal table
@@ -317,7 +363,7 @@ public class AccountingSoftware extends Application {
                 journal.getItems().add(new JournalEntry(
                         null,
                         "    " + creditInputBlocks.get(i).getSelectedAccountName(),
-                        Polarity.Credit,
+                        AccountPolarity.Kredit,
                         "Rp" + String.format(
                                 "%,d", Integer.parseInt(creditInputBlocks.get(i).getInputValue()))));
             }
@@ -328,7 +374,7 @@ public class AccountingSoftware extends Application {
             journal.getItems().add(new JournalEntry(
                     null,
                     "    " + "(" +  descriptionField.getText() + ")",
-                    Polarity.Debit,
+                    AccountPolarity.Debit,
                     ""
             ));
         }
@@ -356,34 +402,40 @@ public class AccountingSoftware extends Application {
 
     private void submitEntryToAccounts() {
 
-        for (int x = 0; x < debitInputBlocks.size(); x++) {
-            InputBlock tempInputBlock = debitInputBlocks.get(x);
+        debitInputBlocks.forEach(x -> {
+            InputBlock tempInputBlock = x;
 
-            for (int i = 0; i < accountList.getAllAccounts().size(); i++) {
-                Account tempAccount = accountList.getAllAccounts().get(i);
+            accountList.getAllAccounts().forEach(y -> {
+                Account tempAccount = y;
 
                 if (tempInputBlock.getSelectedAccountName().equals(tempAccount.getName())) {
-                    tempAccount.addEntry(new LedgerEntry(datePicker.getValue(), null,
-                            Polarity.Debit,
-                            tempInputBlock.getInputValue()));
+                    tempAccount.addEntry(
+                            new LedgerEntry(
+                                    datePicker.getValue(),
+                                    null,
+                                    AccountPolarity.Debit,
+                                    tempInputBlock.getInputValue()));
                 }
                 
-            }
-        }
+            });
+        });
 
-        for (int x = 0; x < creditInputBlocks.size(); x++) {
-            InputBlock tempInputBlock = creditInputBlocks.get(x);
+        creditInputBlocks.forEach(x -> {
+            InputBlock tempInputBlock = x;
 
-            for (int i = 0; i < accountList.getAllAccounts().size(); i++) {
-                Account tempAccount = accountList.getAllAccounts().get(i);
+            accountList.getAllAccounts().forEach(y -> {
+                Account tempAccount = y;
 
                 if (tempInputBlock.getSelectedAccountName().equals(tempAccount.getName())) {
-                    tempAccount.addEntry(new LedgerEntry(datePicker.getValue(), null,
-                            Polarity.Credit,
-                            tempInputBlock.getInputValue()));
+                    tempAccount.addEntry(
+                            new LedgerEntry(
+                                    datePicker.getValue(),
+                                    null,
+                                    AccountPolarity.Kredit,
+                                    tempInputBlock.getInputValue()));
                 }
-            }
-        }
+            });
+        });
     }
 
     private void postEntryToLedger() {
@@ -398,19 +450,19 @@ public class AccountingSoftware extends Application {
         for (LedgerTable e : ledger.getAllLedgerTables()) {
             if (!e.getTableItems().isEmpty()) {
                 switch (e.getAccountType()) {
-                    case Asset:
+                    case Aset:
                         assetScrollPaneContent.getChildren().add(e);
                         break;
-                    case Liability:
+                    case Liabilitas:
                         liabilityScrollPaneContent.getChildren().add(e);
                         break;
-                    case Equity:
+                    case Ekuitas:
                         equityScrollPaneContent.getChildren().add(e);
                         break;
-                    case Income:
+                    case Pendapatan:
                         incomeScrollPaneContent.getChildren().add(e);
                         break;
-                    case Expense:
+                    case Beban:
                         expenseScrollPaneContent.getChildren().add(e);
                         break;
                 }
@@ -495,7 +547,7 @@ public class AccountingSoftware extends Application {
         addAccountButton.setOnAction(e -> openAddAccountWindow());
 
         Button editAccountButton = new Button("Edit Account");
-        editAccountButton.setOnAction(e -> openEditAccountWindow());
+        editAccountButton.setOnAction(e -> openEditAccountWindow(accountTableView.getSelectionModel().getSelectedItem()));
 
         Button deleteAccountButton = new Button("Delete Account");
         deleteAccountButton.setOnAction(e -> openDeleteAccountWindow());
@@ -514,7 +566,6 @@ public class AccountingSoftware extends Application {
         accountManager.show();
     }
 
-
     public void openAddAccountWindow() {
         Stage addAccountWindow = new Stage();
 
@@ -524,10 +575,10 @@ public class AccountingSoftware extends Application {
         TextField accountName = new TextField();
 
         ComboBox<String> accountType = new ComboBox<>();
-        accountType.getItems().addAll(Arrays.asList("Aset", "Liabilitas", "Ekuitas", "Pendapatan", "Beban"));
+        accountType.getItems().addAll(AccountType.getEnumValues());
 
         ComboBox<String> accountNormal = new ComboBox<>();
-        accountNormal.getItems().addAll(Arrays.asList("Debit", "Kredit"));
+        accountNormal.getItems().addAll(AccountPolarity.getEnumValues());
 
         TextField accountInitialValue = new TextField();
 
@@ -564,8 +615,57 @@ public class AccountingSoftware extends Application {
     }
 
     //TODO: Add edit account functionality
-    private void openEditAccountWindow() {
+    private void openEditAccountWindow(Account selectedAccount) {
+        Stage editAccountWindow = new Stage();
 
+        TextField accountNumber = new TextField();
+        accountNumber.setText(String.valueOf(selectedAccount.getNumber()));
+        accountNumber.setPrefWidth(50);
+
+        TextField accountName = new TextField();
+        accountName.setText(selectedAccount.getName());
+
+        ComboBox<String> accountType = new ComboBox<>();
+        accountType.getItems().addAll(AccountType.getEnumValues());
+        accountType.getSelectionModel().select(selectedAccount.getType().toString());
+
+        ComboBox<String> accountNormal = new ComboBox<>();
+        accountNormal.getSelectionModel().select(selectedAccount.getNormalString());
+        accountType.getItems().addAll(AccountPolarity.getEnumValues());
+
+        TextField accountBalance = new TextField();
+        accountBalance.setText(selectedAccount.getBalanceString());
+
+        Button updateButton = new Button("Update");
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(e -> editAccountWindow.close());
+
+        GridPane grid = new GridPane();
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(5));
+        grid.add(new Label("Nomor"), 0, 0);
+        grid.add(accountNumber, 0, 1);
+        grid.add(new Label("Nama"), 1, 0);
+        grid.add(accountName, 1, 1);
+        grid.add(new Label("Jenis"), 2, 0);
+        grid.add(accountType, 2, 1);
+        grid.add(new Label("Saldo Normal"), 3, 0);
+        grid.add(accountNormal, 3, 1);
+        grid.add(new Label("Saldo Awal"), 4, 0);
+        grid.add(accountBalance, 4, 1);
+
+        HBox buttonRow = new HBox(5, updateButton, cancelButton);
+        buttonRow.setAlignment(Pos.CENTER);
+
+        VBox root = new VBox(5, grid, buttonRow);
+
+        editAccountWindow.setTitle("Edit Account");
+        editAccountWindow.setResizable(false);
+        editAccountWindow.initModality(Modality.APPLICATION_MODAL);
+        editAccountWindow.setScene(new Scene(root));
+        editAccountWindow.show();
     }
 
     //TODO: Add delete accont functionality

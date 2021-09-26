@@ -1,5 +1,12 @@
 package account;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public enum AccountType {
-    Asset, Liability, Equity, Income, Expense;
+    Aset, Liabilitas, Ekuitas, Pendapatan, Beban;
+
+    public static ArrayList<String> getEnumValues() {
+        return new ArrayList<>(Arrays.asList("Aset", "Liabilitas", "Ekuitas", "Pendapatan", "Beban"));
+    }
 }

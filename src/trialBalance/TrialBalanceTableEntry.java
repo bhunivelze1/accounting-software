@@ -23,7 +23,7 @@ public class TrialBalanceTableEntry {
                 debitString = "Rp" + String.format("%,d", value);
                 creditValue = 0;
                 break;
-            case Credit:
+            case Kredit:
                 creditValue = value;
                 creditString = "Rp" + String.format("%,d", value);
                 debitValue = 0;
