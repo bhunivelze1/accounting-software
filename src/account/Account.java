@@ -99,6 +99,8 @@ public class Account {
             this.entries.add(tempLedgerEntry);
 
         } else if (!this.entries.isEmpty()) {
+            balance += tempLedgerEntry.getDebitValue();
+            this.balanceString = Integer.toString(balance);
             tempLedgerEntry.setTotalValue(calculateTotal(this.entries.get(this.entries.size()-1), tempLedgerEntry));
             tempLedgerEntry.setTotalString("Rp" + String.format("%,d", tempLedgerEntry.getTotalValue()));
             this.entries.add(tempLedgerEntry);

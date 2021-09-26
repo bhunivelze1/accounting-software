@@ -530,24 +530,30 @@ public class AccountingSoftware extends Application {
 
     public void openAccountManager() {
 
+        /* TABLE COLUMNS */
+        //Account number column
         TableColumn<Account, Integer> numberCol = new TableColumn<>("Number");
         numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
+        //Account name column
         TableColumn<Account, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        //Account normal column
         TableColumn<Account, String> normalCol = new TableColumn<>("Normal");
         normalCol.setCellValueFactory(new PropertyValueFactory<>("normalString"));
+        //Account balance column
         TableColumn<Account, String> balanceCol = new TableColumn<>("Balance");
         balanceCol.setCellValueFactory(new PropertyValueFactory<>("balance"));
 
-        TableView<Account> accountTableView = new TableView();
-        accountTableView.getColumns().addAll(numberCol, nameCol, normalCol, balanceCol);
-        accountTableView.getItems().addAll(accountList.getAllAccounts());
+        /* TABLE VIEW */
+        TableView<Account> accountManagerTableView = new TableView();
+        accountManagerTableView.getColumns().addAll(numberCol, nameCol, normalCol, balanceCol);
+        accountManagerTableView.setItems(AccountList.getAllAccounts());
         
         Button addAccountButton = new Button("Add Account");
         addAccountButton.setOnAction(e -> openAddAccountWindow());
 
         Button editAccountButton = new Button("Edit Account");
-        editAccountButton.setOnAction(e -> openEditAccountWindow(accountTableView.getSelectionModel().getSelectedItem()));
+        editAccountButton.setOnAction(e -> openEditAccountWindow(accountManagerTableView.getSelectionModel().getSelectedItem()));
 
         Button deleteAccountButton = new Button("Delete Account");
         deleteAccountButton.setOnAction(e -> openDeleteAccountWindow());
@@ -556,7 +562,7 @@ public class AccountingSoftware extends Application {
         buttonRow.setAlignment(Pos.CENTER);
         buttonRow.setPadding(new Insets(5));
 
-        VBox root = new VBox(accountTableView, buttonRow);
+        VBox root = new VBox(accountManagerTableView, buttonRow);
 
         Stage accountManager = new Stage();
         accountManager.setTitle("Account Manager");

@@ -3,7 +3,7 @@ package ledger;
 import account.AccountPolarity;
 import java.time.LocalDate;
 
-//TODO: Add account balance update in accout manager when a new entry submitted to ledger
+//TODO: Add account balance update in account manager when a new entry submitted to ledger
 public class LedgerEntry {
     
     LocalDate date;

@@ -1,10 +1,15 @@
 package account;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import ledger.LedgerEntry;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AccountList {
-    static ArrayList<Account> accounts = new ArrayList(Arrays.asList(
+
+    static ObservableList<Account> accounts = FXCollections.observableArrayList(Arrays.asList(
             new Account(111, "Kas", AccountType.Aset, AccountPolarity.Debit, 10000),
             new Account(112, "Piutang", AccountType.Aset, AccountPolarity.Debit, 20000),
             new Account(113, "Persediaan", AccountType.Aset, AccountPolarity.Debit, 0),
@@ -22,7 +27,7 @@ public class AccountList {
             new Account(422, "Pendapatan Lain-Lain", AccountType.Pendapatan, AccountPolarity.Kredit, 0),
             new Account(511, "Beban Gaji", AccountType.Beban, AccountPolarity.Debit, 0)));
     
-    public ArrayList<Account> getAllAccounts() {
+    public static ObservableList<Account> getAllAccounts() {
         return accounts;
     }
     
